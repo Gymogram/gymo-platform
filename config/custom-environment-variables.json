@@ -1,0 +1,7 @@
+{
+    "secretKey" : "GYMO_SECRET_KEY",
+    "db" : {
+        "user" :  "GYMO_DB_USER",
+        "password" : "GYMO_DB_PASSWORD"
+    }
+}

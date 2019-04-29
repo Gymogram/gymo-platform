@@ -1,0 +1,8 @@
+{
+    "db" : {
+        "url" : "mongodb://localhost/gymodb_test"
+
+    },
+    "secretKey" : "tstKey12314"
+
+}

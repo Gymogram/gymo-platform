@@ -1,0 +1,19 @@
+[
+    {
+        "name": "General",
+        "description": "TBD"
+    },
+    {
+        "name": "Specific",
+        "description": "TBD"
+    },
+    {
+        "name": "Development",
+        "description": "TBD"
+    },
+    {
+        "name": "Maintenance",
+        "description": "TBD"
+    }
+
+]
