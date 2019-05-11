@@ -13,8 +13,9 @@ This project uses YARN to manage despendencies. Make sure to have installed firs
 Global dependencies: npm, nodemon
 
 For MAC users:
-
+```
 brew install yarn
+```
 
 Windows:
 See: (https://yarnpkg.com/en/docs/install#windows-stable)
@@ -26,10 +27,10 @@ Mongo DB: See: (https://docs.mongodb.com/manual/installation/#tutorial-installat
 
 A step by step series of examples that tell you how to get a development env running
 
-Say what the step will be
+Install all the application packages
 
 ```
-Give the example
+yarn install
 ```
 
 And repeat
@@ -41,8 +42,19 @@ until finished
 End with an example of getting some data out of the system or using it for a little demo
 
 ## Running the tests
-
+To run all test suite:
+```
 yarn test-check
+```
+If your are using VScode as editor, use this suggested extension: **Mocha Test Explorer** 
+to run specific tests.
+Add the following configuration seetings to VScode:
+
+```
+"mochaExplorer.require": ["esm"],
+"mochaExplorer.exit": true,
+"mochaExplorer.timeout": 5000
+```
 
 
 ## Deployment

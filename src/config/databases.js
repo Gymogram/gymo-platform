@@ -4,20 +4,19 @@ import mongoose from 'mongoose';
 import config from 'config';
 import IdentificationType from './../modules/users/models/identificationType.model';
 import StageType from './../modules/plans/models/stageType.model';
-import PeriodType  from './../modules/plans/models/periodType.model';
-
+import PeriodType from './../modules/plans/models/periodType.model';
 
 mongoose.Promise = global.Promise;
 
 try {
-  mongoose.connect(config.get('db.url'), { useNewUrlParser: true });
+  mongoose.connect(config.get('db.url'), { useNewUrlParser: true, useFindAndModify: false });
 } catch (error) {
   mongoose.createConnection(config.get('db.url'));
 }
 
 mongoose.connection
   .on('error', e => { console.error.bind(console, 'DB connection error:'); throw e; })
-  .once('open', async() => {
+  .once('open', async () => {
     console.log(`DB connected to: ${config.get('db.url')}`);
     await initializeReferenceData();
   });
