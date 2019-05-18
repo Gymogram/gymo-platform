@@ -8,7 +8,7 @@ import User from '../../src/modules/users/models/user.model';
 chai.use(chaiHttp);
 describe('LOGIN endpoint', () => {
   after(async () => {
-    await User.deleteMany({ email: 'test@tester.com' });
+    await User.deleteMany({});
     delete require.cache[require.resolve('../../src/index')];
   });
 

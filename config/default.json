@@ -2,5 +2,17 @@
     "db" : {
         "url" : "mongodb://localhost/gymodb_dev"
 
+    },
+    "app" : {
+        "pagination" : {
+            "pageSize" : 5
+        },
+        "search" : {
+            "activity" : {
+                "filterAttributes" : ["name", "activityType", "hasAnyMedia", "mediaType", "createdBy", "lastUpdatedBy"],
+                "defaultSortField" : "name",
+                "defaultSortOrder" : "asc"
+            }
+        }
     }
 }

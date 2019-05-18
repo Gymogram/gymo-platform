@@ -9,7 +9,8 @@ module.exports = {
       {
         "varsIgnorePattern": "should|expect"
       }
-    ]
+    ],
+    "max-len": "off"
   }
 }
 

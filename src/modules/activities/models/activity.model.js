@@ -12,12 +12,12 @@ const ActivitySchema = new Schema({
   },
   description: {
     type: String,
-    maxlength: 500,
+    maxlength: 1000,
     trim: true,
   },
   recommendations: {
     type: String,
-    maxlength: 500,
+    maxlength: 1000,
     trim: true,
   },
   createdBy: {
@@ -62,6 +62,8 @@ ActivitySchema.methods = {
     const selectedFields = ActivitySchema.statics.getPublicFields();
     selectedFields.push('createdBy');
     selectedFields.push('lastUpdatedBy');
+    selectedFields.push('createdAt');
+    selectedFields.push('updatedAt');
     selectedFields.push('_id');
     const filteredObj = _.pick(
       this, selectedFields);    

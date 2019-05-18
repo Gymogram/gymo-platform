@@ -10,6 +10,8 @@ const routes = new Router();
 routes.post('/', [authJWT, isCoachOrAdmin], validate(activityValidator.create), activityController.create);
 routes.patch('/:id', [authJWT, isCoachOrAdmin], validate(activityValidator.update), activityController.update);
 routes.delete('/:id', [authJWT, isCoachOrAdmin], activityController.remove);
+routes.get('/:id', authJWT, activityController.searchById);
+routes.get('/', authJWT, activityController.search);
 
 export default routes;
 

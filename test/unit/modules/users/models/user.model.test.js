@@ -6,7 +6,7 @@ import User from '../../../../../src/modules/users/models/user.model';
 
 const should = chai.should();
 
-describe('User.buildToken', () => {
+describe('USER.buildToken', () => {
   it('should return a valid JWT', async () => {
     const data = { _id: new moongose.Types.ObjectId().toHexString(), roles: ['COACH', 'ADMIN'] };
     const testUser = await new User(data);

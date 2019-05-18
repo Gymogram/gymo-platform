@@ -12,7 +12,7 @@
     "dev": "cross-env NODE_ENV=development nodemon dist/index.bundle.js",
     "dev-debug": "cross-env NODE_ENV=development nodemon --inspect dist/index.bundle.js",
     "dev:build": "yarn run clean && webpack -w --mode development",
-    "test-check": "cross-env NODE_ENV=test DEBUG=gymogram_api:* mocha --require esm  --timeout 5000 --exit",
+    "test-check": "cross-env NODE_ENV=test DEBUG=gymogram_api:* mocha --require esm  --timeout 9000 --exit",
     "test": "cross-env NODE_ENV=test nodemon --inspect dist/index.bundle.js"
   },
   "nyc": {
@@ -34,7 +34,6 @@
   "dependencies": {
     "@babel/core": "^7.1.6",
     "@babel/runtime": "^7.3.1",
-    "joi": "^14.3.1",
     "bcrypt-nodejs": "^0.0.3",
     "body-parser": "^1.18.3",
     "compression": "^1.7.3",
@@ -47,6 +46,7 @@
     "helmet": "^3.15.0",
     "http-status": "^1.3.1",
     "istanbul": "^0.4.5",
+    "joi": "^14.3.1",
     "joi-objectid": "^2.0.0",
     "joi-password-complexity": "^2.0.1",
     "jsonwebtoken": "^8.5.1",
@@ -70,6 +70,8 @@
     "chai": "^4.2.0",
     "chai-http": "^4.2.1",
     "chai-passport-strategy": "^1.0.1",
+    "chai-sorted": "^0.2.0",
+    "chai-things": "^0.2.0",
     "eslint-config-equimper": "^2.2.2",
     "eslint-plugin-babel": "^5.3.0",
     "eslint-plugin-import": "^2.17.2",
