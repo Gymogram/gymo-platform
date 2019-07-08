@@ -12,6 +12,11 @@
                 "filterAttributes" : ["name", "activityType", "hasAnyMedia", "mediaType", "createdBy", "lastUpdatedBy"],
                 "defaultSortField" : "name",
                 "defaultSortOrder" : "asc"
+            },
+            "plan" : {
+                "filterAttributes" : ["name", "startDate", "endDate", "signOffDate", "isActive", "trainee", "isPublished", "createdBy", "lastUpdatedBy", "weekFrequency" ],
+                "defaultSortField" : "name",
+                "defaultSortOrder" : "asc"
             }
         }
     }

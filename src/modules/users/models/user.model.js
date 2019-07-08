@@ -49,6 +49,7 @@ const UserSchema = new Schema({
     required: [true, 'Email is required'],
     trim: true,
     unique: true,
+    lowercase: true,
     validate: {
       validator(email) {
         return validator.isEmail(email);

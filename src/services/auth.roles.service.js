@@ -12,7 +12,7 @@ export const isCoachOrAdmin = function (req, res, next) {
 
 export const isCoach = function (req, res, next) {
   const hasValidRoles = _.includes(req.user.roles, 'COACH');
-  
+    
   if (!hasValidRoles) {
     return res.status(HttpStatus.FORBIDDEN).send('Access denied.');
   }

@@ -8,6 +8,7 @@ const PlanSchema = new Schema({
     maxlength: 255,
     trim: true,
     uppercase: true,
+    required: true,
   },
   goals: [{
     type: String,
@@ -25,15 +26,15 @@ const PlanSchema = new Schema({
   },
   isActive: {
     type: Boolean,
-    default: true,
+    default: true, // Turn to false when end or is cancelled explictly
   },
-  signOffDate: {
+  signOffDate: { // Effective termination day 
     type: Date,
   },
   weekFrequency: {
     type: Number,
     min: 1,
-    max: 21,
+    max: 7,
   },
   trainee: {
     type: Schema.Types.ObjectId,
@@ -62,7 +63,7 @@ const PlanSchema = new Schema({
           type: Schema.Types.ObjectId,
           ref: 'StageType',
         },
-        weeks: new Schema({
+        weeks: [new Schema({
           order: {
             type: Number,
             min: 1,
@@ -74,7 +75,7 @@ const PlanSchema = new Schema({
             maxlength: 500,
             trim: true,
           }],
-          sessions: new Schema({
+          sessions: [new Schema({
             order: {
               type: Number,
               min: 1,
@@ -100,9 +101,15 @@ const PlanSchema = new Schema({
             },
             delayedWeeks: {
               type: Number,
-              min: 1,
+              // min: 1, TODO: review this
+              default: 0,
             },
-            works: new Schema({
+            works: [new Schema({
+              order: {
+                type: Number,
+                min: 1,
+                required: true,
+              },
               series: {
                 type: Number,
                 min: 1,
@@ -112,21 +119,32 @@ const PlanSchema = new Schema({
                 type: Number,
                 min: 1,
                 max: 100,
+                required: () => this.series >= 1,
               },
-              weight: {
+              restTimePerSerieSec: { 
                 type: Number,
-                min: 1,
+                min: 5,
+                required: () => this.series > 1,
+              },
+              minWeight: {
+                type: Number,
+                min: 0.5,
                 max: 1000,
               },
-              completionTime: {
+              maxWeight: {
                 type: Number,
-                min: 1,
+                min: 0.5,
+                max: 1000,
+              },
+              completionTimeSec: {
+                type: Number,
+                min: 0,
                 // CHECK IF MAX NEEDED
               },
-              estimatedTime: {
+              estimatedTimeSec: {
                 type: Number,
-                min: 1,
-                // CHECK IF MAX NEEDED
+                min: 0,
+                // CHECK IF MAX NEEDED validate WITH BUILDER
               },
               isCompleted: {
                 type: Boolean,
@@ -136,11 +154,16 @@ const PlanSchema = new Schema({
                 type: Schema.Types.ObjectId,
                 ref: 'Activity',
               },
-            }),
+              customNotes: {
+                type: String,
+                maxlength: 1000,
+                trim: true,
+              },
+            })],
 
-          }),
+          })],
 
-        }),
+        })],
       }
     ),
   }],
@@ -157,7 +180,44 @@ const PlanSchema = new Schema({
     ref: 'User',
     required: true,
   },
+  lastUpdatedBy: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+  },
 
 }, { timestamps: true });
+
+PlanSchema.methods = {
+  toJSON() {
+    const selectedFields = PlanSchema.statics.getPublicFields();
+    selectedFields.push('createdBy');
+    selectedFields.push('lastUpdatedBy');
+    selectedFields.push('createdAt');
+    selectedFields.push('updatedAt');
+    selectedFields.push('signOffDate');
+    selectedFields.push('_id');
+    selectedFields.push('isPublished');
+    selectedFields.push('isActive');
+    selectedFields.push('template');
+
+    const filteredObj = _.pick(
+      this, selectedFields);    
+    return filteredObj;
+  },
+};
+
+PlanSchema.pre('validate', function (next) {
+  if (this.startDate > this.endDate) {
+    next(new Error('End Date must be greater than Start Date'));
+  } else {
+    next();
+  }
+});
+
+PlanSchema.statics = {
+  getPublicFields() {
+    return ['name', 'goals', 'startDate', 'endDate', 'weekFrequency', 'trainee', 'months'];
+  },
+};
 
 export default mongoose.model('Plan', PlanSchema);

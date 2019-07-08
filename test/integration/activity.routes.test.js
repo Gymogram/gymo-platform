@@ -467,7 +467,7 @@ describe('ACTIVITY endpoint', () => {
     });
   });
 
-  context('/activities/:id GET (filtered)', () => {
+  context('/activities/ GET (filtered)', () => {
     const expect = chai.expect;
     const json = require('./data/activities.json');
     let token;
@@ -734,7 +734,7 @@ describe('ACTIVITY endpoint', () => {
       res.should.have.status(HttpStatus.BAD_REQUEST);
     });
 
-    it('should not get any activity valid auth token, when an invalid filter criteria is provided.', async () => {
+    it('should not get any activity with a valid auth token, when an invalid filter criteria is provided.', async () => {
       attrCriteria = 'mediaType=MOVIE';
       buildFilter();
       const res = await executor();
@@ -746,6 +746,7 @@ describe('ACTIVITY endpoint', () => {
       const res = await executor();
       res.should.have.status(HttpStatus.NOT_FOUND);
     });
+    
     it('should not get any activity for invalid auth token', async () => {
       token = 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
       const res = await executor();
