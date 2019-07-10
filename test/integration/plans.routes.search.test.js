@@ -3,7 +3,6 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import chaiArrays from 'chai-arrays';
 import mongoose from 'mongoose';
-import moment from 'moment';
 import config from 'config';
 import app from '../../src/index';
 import Plan from '../../src/modules/plans/models/plan.model';

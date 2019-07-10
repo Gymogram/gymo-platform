@@ -152,6 +152,33 @@ export async function searchById(req, res) {
   }
 }
 
+export async function getCurrent(req, res) {
+  try {
+    // Check valid trainee
+    const trainee = await Trainee.findOne({ user: req.user._id })
+      .populate('user');
+
+    if (!trainee) {
+      return res.status(HttpStatus.NOT_FOUND).send('Trainee was not found.');
+    } else if (trainee.user.isArchived === true) {
+      return res.status(HttpStatus.BAD_REQUEST).send('Trainee is deactivated.');
+    }
+    const loggedUserPlan = await Plan.findOne({ trainee: trainee._id, isPublished: true })
+      .populate({ path: 'months.periodType' })
+      .populate({ path: 'months.stage' })
+      .populate({ path: 'months.weeks.sessions.works.activity' });
+    
+    if (!loggedUserPlan) {
+      return res.status(HttpStatus.NOT_FOUND).send('There is no plan for the current trainee.');
+    }
+
+    return res.status(HttpStatus.OK).json(loggedUserPlan);
+  } catch (error) {
+    res.setHeader('Content-Type', 'application/json');
+    return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json(error); 
+  }
+}
+
 export async function search(req, res) {
   try {
     const page = parseInt(req.query.page) || 0;

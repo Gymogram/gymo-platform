@@ -12,5 +12,6 @@ routes.patch('/:id', [authJWT, isCoach], validate(planValidator.update), planCon
 routes.delete('/:id', [authJWT, isCoachOrAdmin], planController.remove);
 routes.get('/:id', authJWT, planController.searchById);
 routes.get('/', authJWT, planController.search);
+routes.get('/mine/current', authJWT, planController.getCurrent);
 
 export default routes;

@@ -5,7 +5,6 @@ import chaiArrays from 'chai-arrays';
 import mongoose from 'mongoose';
 import moment from 'moment';
 import _ from 'lodash';
-import config from 'config';
 import app from '../../src/index';
 import Plan from '../../src/modules/plans/models/plan.model';
 import Trainee from '../../src/modules/trainees/models/trainee.model';
@@ -576,6 +575,78 @@ describe('PLANS endpoint', () => {
       const res = await executor();
   
       res.should.have.status(HttpStatus.BAD_REQUEST);
+    });
+  });
+
+  context('/plans/mine/current GET', () => {
+    let token;
+    let planData;
+    let planID;
+    let savedPlan;
+
+    beforeEach(async () => {
+      token = `JWT ${user.buildToken()}`;
+      planData = buildRequest(legacyStages, legacyPeriodTypes, legacyActivities, trainee);
+
+      savedPlan = new Plan(planData);
+      savedPlan.createdBy = user._id;
+      savedPlan.trainee = trainee._id;
+      await savedPlan.save();
+      planID = savedPlan._id;
+    });
+
+    afterEach(async () => {
+      await User.deleteMany({ email: { $regex: '.*@testertmp.*' } });
+      await Plan.deleteMany({});
+    });
+    
+    const executor = () => chai.request(app).get(`${url}mine/current`)
+      .set('Authorization', token)
+      .send();
+
+    it('should get the current plan fof the user with valid auth token', async () => {
+      const traineeUser = await User.findById(trainee.user._id);
+      token = `JWT ${traineeUser.buildToken()}`;
+      await Plan.findByIdAndUpdate(savedPlan._id, { isPublished: true });
+
+      const res = await executor();
+
+      res.should.have.status(HttpStatus.OK);
+      res.body.should.have.deep.property('_id');
+      res.body._id.should.equal(planID.toHexString());
+      res.body.should.have.deep.property('name');
+      res.body.name.should.equal(savedPlan.name);
+      res.body.should.have.deep.property('goals');
+      res.body.should.have.deep.property('createdBy');
+      res.body.should.have.deep.property('isPublished');
+      res.body.isPublished.should.be.deep.equal(true);
+    });
+
+    it('should not get any plan for valid auth token but no active plan', async () => {
+      userData.email = 'customertest@testertmp.com';
+      userData.roles = ['CUSTOMER'];
+      const customerUser = new User(userData);
+      await customerUser.save();
+      token = `JWT ${customerUser.buildToken()}`;
+      traineeData.user = customerUser._id;
+      const newTrainee = new Trainee(traineeData);
+      await newTrainee.save();
+  
+      const res = await executor();
+  
+      res.should.have.status(HttpStatus.NOT_FOUND);
+    });
+
+    it('should not get any plan for valid auth token but no trainee profile', async () => {
+      const res = await executor();
+  
+      res.should.have.status(HttpStatus.NOT_FOUND);
+    });
+
+    it('should not get the current plan for invalid auth token', async () => {
+      token = 'JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';
+      const res = await executor();
+      res.should.have.status(HttpStatus.UNAUTHORIZED);
     });
   });
 });
