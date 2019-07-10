@@ -64,22 +64,24 @@ export default class PlanIntegrityValidator {
           // Check valid Stage
           const stagesIDs = [];
           this.req.months.forEach(month => {
-            if (!_.find(stagesIDs, month.stageID)) {
+            if (!_.find(stagesIDs, month.stageID) && month.stageID) {
               stagesIDs.push(month.stageID);
             }
           });
-
-          this.areAllStagesValid = _.difference(stagesIDs, this.legacyStages).length === 0;
+          if (stagesIDs.length !== 0) {
+            this.areAllStagesValid = _.difference(stagesIDs, this.legacyStages).length === 0;
+          }
 
           // Check valid Period Type
           const periodTypeIDs = [];
           this.req.months.forEach(month => {
-            if (!_.find(periodTypeIDs, month.periodTypeID)) {
+            if (!_.find(periodTypeIDs, month.periodTypeID) && month.periodTypeID) {
               periodTypeIDs.push(month.periodTypeID);
             }
           });
-
-          this.areAllPeriodTypesValid = _.difference(periodTypeIDs, this.legacyPeriodTypes).length === 0;
+          if (periodTypeIDs.length !== 0) {
+            this.areAllPeriodTypesValid = _.difference(periodTypeIDs, this.legacyPeriodTypes).length === 0;
+          }
         }
 
         return this;

@@ -119,12 +119,10 @@ const PlanSchema = new Schema({
                 type: Number,
                 min: 1,
                 max: 100,
-                required: () => this.series >= 1,
               },
               restTimePerSerieSec: { 
                 type: Number,
                 min: 5,
-                required: () => this.series > 1,
               },
               minWeight: {
                 type: Number,

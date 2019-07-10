@@ -7,7 +7,7 @@ export default {
     body: {
       name: Joi.string().min(3).max(255).required(),
       description: Joi.string().max(500).required(),
-      recommendations: Joi.string().max(500).required(),
+      recommendations: Joi.string().max(500),
       activityType: Joi.string().valid('EFFORT', 'RECOVERY').required(),
       media: Joi.array().items(Joi.object({
         mediaType: Joi.string().valid('IMAGE', 'VIDEO').required(),
